@@ -1,0 +1,24 @@
+# Starts a Jenkins server on port 8080.
+# The Jenkins data folder is mapped to the subfolder "jenkins-data" in the local folder.
+version: '3'
+services:
+   jenkins:
+      build:
+         # Use the Dockerfile in the same directory to build the image.
+         context: .
+      # This is the name of the built image
+      image: sthdev_jenkins
+      # This is the name of the container created from the image.
+      container_name: sthdev_jenkins_master
+      ports:
+      - 8080:8080
+      - 50000:50000
+      volumes:
+      # Maps jenkins_home in the container to jenkins_home in the current folder.
+      - ./jenkins_home:/var/jenkins_home
+      # This socket is used to communicate with the Docker daemon. For the Jenkins
+      # Docker agent in the container to be able to communicate with the Docker daemon
+      # on the host machine, this socket must be mapped as well.
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Always start this container when the Docker daemon starts.
+      restart: always
